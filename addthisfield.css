@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+  
+div.addthis-toggler {
+    background: url(images/addthis_button.png);
+    width: 50px;
+    height: 18px;
+}
+
+div.addthis-share-buttons {
+    margin-top: 10px;
+    display: none;
+}

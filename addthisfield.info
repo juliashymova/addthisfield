@@ -1,0 +1,8 @@
+; $Id$
+
+name = Addthis field
+description = Custom addthis field.
+
+dependencies[] = field_ui
+
+core = 7.x

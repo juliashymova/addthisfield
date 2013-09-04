@@ -1,0 +1,88 @@
+<?php
+// $Id$
+
+
+/**
+ * Implementation of hook_field_info().
+ */
+function addthisfield_field_info() {
+  return array(
+    'addthisfield' => array(
+      'label' => t('Addthis share buttons'),
+      'description' => t('Custom addthis field.'),
+      'default_widget' => 'addthisfield_text',
+      'default_formatter' => 'addthisfield_default',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+
+function addthisfield_field_widget_info() {
+  return array(
+      'addthisfield_widget' => array(
+          'label' => t('Default'),
+          'field types' => array('addthisfield'),
+      ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function addthisfield_field_formatter_info() {
+  return array(
+      'addthisfield_default' => array(
+          'label' => t('Addthis buttons format'),
+          'field types' => array('addthisfield'),
+      ),
+  );
+}
+
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function addthisfield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'addthisfield_default':
+      $element[0] = array(
+        '#type' => 'markup',
+        '#markup' => theme('addthisfield_formatter_default', array('node' => $entity)),
+        '#attached' => array(
+          'js' => array(drupal_get_path('module','addthisfield') . '/addthisfield.js'),
+          'css' => array(drupal_get_path('module','addthisfield') . '/addthisfield.css'),
+        ),
+      );
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_prepare_view().
+ *
+ * Adds a dummy value in AddThis field for nodes that do not have any value for
+ * the field to make rendering possible.
+ */
+function addthisfield_field_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items) {
+  foreach ($items as $key => $item) {
+    if (!isset($item[0]['value'])) {
+      $items[$key][0]['value'] = 'Dummy value';
+    }
+  }
+}
+
+function addthisfield_theme($existing, $type, $theme, $path) {
+  return array(
+      'addthisfield_formatter_default' => array(
+          'template' => 'addthisfield',
+          'variables' => array('node' => NULL),
+      ),
+  );
+}
